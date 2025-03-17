@@ -17,7 +17,7 @@ class SmsController extends Controller
     {
         try {
             // Get URL from .env (with default fallback)
-            $url = env('SMS_GATEWAY_URL', 'http://192.168.178.99:8888/send-message');
+            $url = env('SMS_GATEWAY_URL', 'http://192.168.178.98:8888/send-message');
             $username = env('SMS_GATEWAY_USERNAME', 'admin');
             $password = env('SMS_GATEWAY_PASSWORD', 'password');
 
