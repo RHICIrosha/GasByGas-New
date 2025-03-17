@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}GasByGas Admin{% endblock %}</title>
+    <title>GasByGas Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/admin-styles.css">
+     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
     <style>
         /* GasByGas Admin Styles */
 
@@ -332,13 +332,13 @@ body {
             <div class="col-md-2 sidebar pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="/admin/dashboard">
+                        <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="{{ route('admin.dashboard') }}">
                             <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'distribution' %}active{% endif %}" href="/admin/distribution">
-                            <i class="fas fa-truck-loading me-2"></i>Distribution
+                        <a class="nav-link {{ request()->routeIs('admin.stocks.*') ? 'active' : '' }}" href="{{ route('admin.stocks.index') }}">
+                            <i class="fas fa-cubes"></i>Stock Management
                         </a>
                     </li>
                     <li class="nav-item">
@@ -404,7 +404,7 @@ body {
     @yield('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   
+
 
     <script>
         // Common admin layout JavaScript

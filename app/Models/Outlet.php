@@ -9,75 +9,73 @@ class Outlet extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'code',
         'name',
+        'code',
         'address',
-        'contact_number',
-        'has_stock',
-        'is_accepting_orders',
-        'manager_user_id',
+        'city',
+        'district',
+        'phone',
+        'email',
+        'manager_id',
+        'is_active',
+        'open_time',
+        'close_time',
+        'capacity',
+        'notes'
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
-        'has_stock' => 'boolean',
-        'is_accepting_orders' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     /**
-     * Get the manager user that is associated with the outlet.
+     * Get the user who manages this outlet
      */
-    public function managerUser()
+    public function manager()
     {
-        return $this->belongsTo(User::class, 'manager_user_id');
+        return $this->belongsTo(User::class, 'manager_id');
     }
 
     /**
-     * Get all gas requests for this outlet.
+     * Get all stocks for this outlet
      */
-    public function gasRequests()
+    public function stocks()
     {
-        return $this->hasMany(GasRequest::class);
+        return $this->hasMany(OutletStock::class);
     }
 
     /**
-     * Get all delivery schedules for this outlet.
-    //  */
-    // public function deliverySchedules()
-    // {
-    //     return $this->hasMany(DeliverySchedule::class);
-    // }
-
-    /**
-     * Get all tokens associated with this outlet.
+     * Get all stock allocations for this outlet
      */
-    public function tokens()
+    public function stockAllocations()
     {
-        return $this->hasMany(Token::class);
+        return $this->hasMany(StockAllocation::class);
     }
 
     /**
-     * Check if the outlet can accept new orders based on stock and settings.
-     *
-     * @return bool
+     * Get all customer requests for this outlet
      */
-    public function canAcceptOrders()
+    public function customerRequests()
     {
-        return $this->has_stock && $this->is_accepting_orders;
+        return $this->hasMany(CustomerRequest::class);
     }
 
     /**
-     * Get upcoming delivery schedule for this outlet.
+     * Scope a query to only include active outlets
      */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 
+    /**
+     * Get active status label
+     */
+    public function getStatusLabelAttribute()
+    {
+        return $this->is_active
+            ? '<span class="badge badge-success">Active</span>'
+            : '<span class="badge badge-danger">Inactive</span>';
+    }
 }

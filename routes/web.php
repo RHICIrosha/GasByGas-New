@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\Admin\HeadOfficeStockController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
@@ -54,3 +56,37 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+// Admin Controllers
+Route::middleware(['auth'])->group(function () {
+    // Head Office Stock Management
+    Route::get('/admin/stocks', [HeadOfficeStockController::class, 'index'])->name('admin.stocks.index');
+    Route::get('/admin/stocks/create', [HeadOfficeStockController::class, 'create'])->name('admin.stocks.create');
+    Route::post('/admin/stocks', [HeadOfficeStockController::class, 'store'])->name('admin.stocks.store');
+    Route::get('/admin/stocks/{stock}', [HeadOfficeStockController::class, 'show'])->name('admin.stocks.show');
+    Route::get('/admin/stocks/{stock}/edit', [HeadOfficeStockController::class, 'edit'])->name('admin.stocks.edit');
+    Route::put('/admin/stocks/{stock}', [HeadOfficeStockController::class, 'update'])->name('admin.stocks.update');
+    Route::delete('/admin/stocks/{stock}', [HeadOfficeStockController::class, 'destroy'])->name('admin.stocks.destroy');
+
+    // Additional stock actions
+    Route::get('/admin/stocks/{stock}/restock', [HeadOfficeStockController::class, 'showRestockForm'])->name('admin.stocks.restock');
+    Route::post('/admin/stocks/{stock}/restock', [HeadOfficeStockController::class, 'restock']);
+    Route::get('/admin/stocks/{stock}/allocate', [HeadOfficeStockController::class, 'showAllocationForm'])->name('admin.stocks.allocate');
+    Route::post('/admin/stocks/{stock}/allocate', [HeadOfficeStockController::class, 'allocate']);
+    Route::get('/stocks/{stock}/restock', [HeadOfficeStockController::class, 'showRestockForm'])
+     ->name('admin.stocks.restock');
+    // Stock allocations management
+    // Route::get('/admin/allocations', [StockAllocationController::class, 'index'])->name('admin.allocations.index');
+    // Route::get('/admin/allocations/{allocation}', [StockAllocationController::class, 'show'])->name('admin.allocations.show');
+    // Route::put('/admin/allocations/{allocation}/transit', [StockAllocationController::class, 'markAsInTransit'])->name('admin.allocations.transit');
+    // Route::put('/admin/allocations/{allocation}/deliver', [StockAllocationController::class, 'markAsDelivered'])->name('admin.allocations.deliver');
+    // Route::put('/admin/allocations/{allocation}/cancel', [StockAllocationController::class, 'cancel'])->name('admin.allocations.cancel');
+
+    // // Gas type management
+    // Route::get('/admin/gas-types', [GasTypeController::class, 'index'])->name('admin.gas-types.index');
+    // Route::get('/admin/gas-types/create', [GasTypeController::class, 'create'])->name('admin.gas-types.create');
+    // Route::post('/admin/gas-types', [GasTypeController::class, 'store'])->name('admin.gas-types.store');
+    // Route::get('/admin/gas-types/{gasType}', [GasTypeController::class, 'show'])->name('admin.gas-types.show');
+    // Route::get('/admin/gas-types/{gasType}/edit', [GasTypeController::class, 'edit'])->name('admin.gas-types.edit');
+    // Route::put('/admin/gas-types/{gasType}', [GasTypeController::class, 'update'])->name('admin.gas-types.update');
+    // Route::delete('/admin/gas-types/{gasType}', [GasTypeController::class, 'destroy'])->name('admin.gas-types.destroy');
+});

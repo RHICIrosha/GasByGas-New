@@ -9,81 +9,32 @@ class GasType extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
+        'code',
         'name',
-        'weight',
+        'description',
         'category',
+        'price',
+        'weight',
+        'is_active'
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
+        'price' => 'decimal:2',
         'weight' => 'decimal:2',
+        'is_active' => 'boolean',
     ];
 
     /**
-     * Get all gas requests for this gas type.
+     * Scope a query to only include active gas types.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function gasRequests()
+    public function scopeActive($query)
     {
-        return $this->hasMany(GasRequest::class);
+        return $query->where('is_active', true);
     }
 
-    /**
-     * Check if this gas type is for domestic use.
-     *
-     * @return bool
-     */
-    public function isDomestic()
-    {
-        return $this->category === 'domestic';
-    }
-
-    /**
-     * Check if this gas type is for commercial use.
-     *
-     * @return bool
-     */
-    public function isCommercial()
-    {
-        return $this->category === 'commercial';
-    }
-
-    /**
-     * Check if this gas type is for industrial use.
-     *
-     * @return bool
-     */
-    public function isIndustrial()
-    {
-        return $this->category === 'industrial';
-    }
-
-    /**
-     * Check if this gas type is portable.
-     *
-     * @return bool
-     */
-    public function isPortable()
-    {
-        return $this->category === 'portable';
-    }
-
-    /**
-     * Check if this gas type is for special use.
-     *
-     * @return bool
-     */
-    public function isSpecial()
-    {
-        return $this->category === 'special';
-    }
+    // ... other methods and relationships
 }
