@@ -342,7 +342,7 @@ body {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'outlets' %}active{% endif %}" href="/admin/outlets">
+                        <a class="nav-link " href="{{route('admin.outlets.index')}}">
                             <i class="fas fa-store me-2"></i>Outlets
                         </a>
                     </li>

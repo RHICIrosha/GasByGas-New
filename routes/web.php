@@ -74,19 +74,22 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/stocks/{stock}/allocate', [HeadOfficeStockController::class, 'allocate']);
     Route::get('/stocks/{stock}/restock', [HeadOfficeStockController::class, 'showRestockForm'])
      ->name('admin.stocks.restock');
-    // Stock allocations management
-    // Route::get('/admin/allocations', [StockAllocationController::class, 'index'])->name('admin.allocations.index');
-    // Route::get('/admin/allocations/{allocation}', [StockAllocationController::class, 'show'])->name('admin.allocations.show');
-    // Route::put('/admin/allocations/{allocation}/transit', [StockAllocationController::class, 'markAsInTransit'])->name('admin.allocations.transit');
-    // Route::put('/admin/allocations/{allocation}/deliver', [StockAllocationController::class, 'markAsDelivered'])->name('admin.allocations.deliver');
-    // Route::put('/admin/allocations/{allocation}/cancel', [StockAllocationController::class, 'cancel'])->name('admin.allocations.cancel');
 
-    // // Gas type management
-    // Route::get('/admin/gas-types', [GasTypeController::class, 'index'])->name('admin.gas-types.index');
-    // Route::get('/admin/gas-types/create', [GasTypeController::class, 'create'])->name('admin.gas-types.create');
-    // Route::post('/admin/gas-types', [GasTypeController::class, 'store'])->name('admin.gas-types.store');
-    // Route::get('/admin/gas-types/{gasType}', [GasTypeController::class, 'show'])->name('admin.gas-types.show');
-    // Route::get('/admin/gas-types/{gasType}/edit', [GasTypeController::class, 'edit'])->name('admin.gas-types.edit');
-    // Route::put('/admin/gas-types/{gasType}', [GasTypeController::class, 'update'])->name('admin.gas-types.update');
-    // Route::delete('/admin/gas-types/{gasType}', [GasTypeController::class, 'destroy'])->name('admin.gas-types.destroy');
 });
+// Admin Routes
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
+    Route::controller(OutletController::class)->group(function () {
+        Route::get('/outlets', 'index')->name('outlets.index');
+        Route::get('/outlets/create', 'create')->name('outlets.create');
+        Route::post('/outlets', [OutletController::class, 'store'])->name('outlets.store');
+        Route::get('/outlets/{outlet}', 'show')->name('outlets.show');
+        Route::get('/outlets/{outlet}/edit', 'edit')->name('outlets.edit');
+        Route::put('/outlets/{outlet}', 'update')->name('outlets.update');
+        Route::delete('/outlets/{outlet}', [OutletController::class, 'destroy'])->name('outlets.destroy');
+        Route::put('/outlets/{outlet}/assign-manager', 'assignManager')->name('outlets.assign-manager');
+    });
+});
+// In your routes file
+Route::post('/outlets/{outlet}/delete', [OutletController::class, 'destroy'])->name('outlets.destroy');
+
