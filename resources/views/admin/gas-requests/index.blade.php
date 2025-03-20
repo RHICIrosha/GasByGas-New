@@ -62,15 +62,15 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>@sortablelink('id', 'ID')</th>
-                                    <th>@sortablelink('request_number', 'Request Number')</th>
-                                    <th>@sortablelink('user_id', 'Customer')</th>
-                                    <th>@sortablelink('gas_type_id', 'Gas Type')</th>
-                                    <th>@sortablelink('outlet_id', 'Outlet')</th>
-                                    <th>@sortablelink('quantity', 'Quantity')</th>
-                                    <th>@sortablelink('status', 'Status')</th>
-                                    <th>@sortablelink('amount', 'Amount')</th>
-                                    <th>@sortablelink('expected_pickup_date', 'Expected Pickup')</th>
+                                    <th>ID</th>
+                                    <th>Request Number</th>
+                                    <th>Customer</th>
+                                    <th>Gas Type</th>
+                                    <th>Outlet</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                    <th>Expected Pickup</th>
                                     <th>Payment & Return</th>
                                     <th>Actions</th>
                                 </tr>
