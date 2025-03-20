@@ -256,6 +256,9 @@
                 <a href="{{ route('outlet.dashboard') }}" class="sidebar-menu-item {{ request()->routeIs('outlet.dashboard') ? 'active' : '' }}">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
+                <a href="{{ route('outlet.order-requests.index') }}" class="sidebar-menu-item {{ request()->routeIs('outlet.orders.*') ? 'active' : '' }}">
+                    <i class="fas fa-shopping-cart"></i> Request Gas
+                </a>
 {{--
                 <a href="{{ route('outlet.tokens.index') }}" class="sidebar-menu-item {{ request()->routeIs('outlet.tokens.*') ? 'active' : '' }}">
                     <i class="fas fa-ticket-alt"></i> Tokens

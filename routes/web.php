@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\GasRequestController;
 use App\Http\Controllers\Admin\HeadOfficeStockController;
+use App\Http\Controllers\Admin\OutletOrderRequestController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
@@ -117,6 +118,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Update cylinder return status via AJAX
     Route::post('/gas-requests/update-cylinder', [GasRequestController::class, 'updateCylinder'])->name('gas-requests.update-cylinder');
 
+
+    Route::get('/outlet-requests', [OutletOrderRequestController::class, 'index'])->name('outlet-requests.index');
+    Route::get('/outlet-requests/{id}', [OutletOrderRequestController::class, 'show'])->name('outlet-requests.show');
+    Route::get('/outlet-requests/{id}/process', [OutletOrderRequestController::class, 'process'])->name('outlet-requests.process');
+    Route::put('/outlet-requests/{id}/process', [OutletOrderRequestController::class, 'updateProcess'])->name('outlet-requests.update-process');
+    Route::post('/outlet-requests/{id}/fulfill', [OutletOrderRequestController::class, 'markAsFulfilled'])->name('outlet-requests.fulfill');
 
     });
 });
