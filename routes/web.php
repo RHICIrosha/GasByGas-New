@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Outlet\OutletOrderRequestController as OutletOutletOrderRequestController;
 use App\Http\Controllers\OutletController;
 use Illuminate\Support\Facades\Route;
 
@@ -119,14 +120,22 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/gas-requests/update-cylinder', [GasRequestController::class, 'updateCylinder'])->name('gas-requests.update-cylinder');
 
 
-    Route::get('/outlet-requests', [OutletOrderRequestController::class, 'index'])->name('outlet-requests.index');
-    Route::get('/outlet-requests/{id}', [OutletOrderRequestController::class, 'show'])->name('outlet-requests.show');
-    Route::get('/outlet-requests/{id}/process', [OutletOrderRequestController::class, 'process'])->name('outlet-requests.process');
-    Route::put('/outlet-requests/{id}/process', [OutletOrderRequestController::class, 'updateProcess'])->name('outlet-requests.update-process');
-    Route::post('/outlet-requests/{id}/fulfill', [OutletOrderRequestController::class, 'markAsFulfilled'])->name('outlet-requests.fulfill');
-
     });
 });
 // In your routes file
 Route::post('/outlets/{outlet}/delete', [OutletController::class, 'destroy'])->name('outlets.destroy');
+
+//Outlet routes
+Route::middleware(['auth', 'role:outlet_manager'])->prefix('outlet')->name('outlet.')->group(function () {
+    // Order Requests Routes
+    Route::get('/order-requests/index', [OutletOutletOrderRequestController::class, 'index'])->name('order-requests.index');
+    Route::get('/order-requests/create', [OutletOutletOrderRequestController::class, 'create'])->name('order-requests.create');
+    Route::post('/order-requests', [OutletOutletOrderRequestController::class, 'store'])->name('order-requests.store');
+    Route::get('/order-requests/{id}', [OutletOutletOrderRequestController::class, 'show'])->name('order-requests.show');
+    Route::get('/order-requests/{id}/edit', [OutletOutletOrderRequestController::class, 'edit'])->name('order-requests.edit');
+    Route::put('/order-requests/{id}', [OutletOutletOrderRequestController::class, 'update'])->name('order-requests.update');
+    Route::put('/order-requests/{id}/cancel', [OutletOutletOrderRequestController::class, 'cancel'])->name('order-requests.cancel');
+
+
+});
 

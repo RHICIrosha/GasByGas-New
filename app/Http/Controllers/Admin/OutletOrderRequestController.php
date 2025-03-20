@@ -21,12 +21,8 @@ class OutletOrderRequestController extends Controller
      */
     public function index(Request $request)
     {
-        $query = OutletOrderRequest::with(['outlet', 'manager']);
-
-        // Search functionality
-        if ($request->has('search') && !empty($request->search)) {
-            $query->where('request_number', 'like', '%' . $request->search . '%');
-        }
+        // Base query for outlet order requests
+        $query = OutletOrderRequest::with(['outlet', 'items']);
 
         // Filter by status
         if ($request->has('status') && !empty($request->status)) {
@@ -38,7 +34,7 @@ class OutletOrderRequestController extends Controller
             $query->where('outlet_id', $request->outlet_id);
         }
 
-        // Date range filter
+        // Filter by date range
         if ($request->has('from_date') && !empty($request->from_date)) {
             $query->whereDate('requested_date', '>=', $request->from_date);
         }
@@ -50,10 +46,13 @@ class OutletOrderRequestController extends Controller
         // Order by latest
         $query->orderBy('created_at', 'desc');
 
-        $orderRequests = $query->paginate(15);
+        // Paginate results
+        $requests = $query->paginate(15);
+
+        // Get all outlets for filter dropdown
         $outlets = Outlet::all();
 
-        return view('admin.outlet-requests.index', compact('orderRequests', 'outlets'));
+        return view('admin.outlet-requests.index', compact('requests', 'outlets'));
     }
 
     /**

@@ -17,25 +17,42 @@ class OutletOrderRequestController extends Controller
     /**
      * Display a listing of the requests.
      */
-    public function index()
-    {
-        // Get the current user's outlet
-        $user = Auth::user();
-        $outlet = $user->managedOutlet;
 
-        if (!$outlet) {
-            return redirect()->route('outlet.dashboard')
-                ->with('error', 'You are not assigned to any outlet.');
-        }
+     public function index(Request $request)
+     {
+         // Base query for outlet order requests
+         $query = OutletOrderRequest::with(['outlet', 'items']);
 
-        // Get all order requests for this outlet
-        $requests = OutletOrderRequest::where('outlet_id', $outlet->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+         // Filter by status
+         if ($request->has('status') && !empty($request->status)) {
+             $query->where('status', $request->status);
+         }
 
-        return view('outlet.order-requests.index', compact('requests', 'outlet'));
-    }
+         // Filter by outlet
+         if ($request->has('outlet_id') && !empty($request->outlet_id)) {
+             $query->where('outlet_id', $request->outlet_id);
+         }
 
+         // Filter by date range
+         if ($request->has('from_date') && !empty($request->from_date)) {
+             $query->whereDate('requested_date', '>=', $request->from_date);
+         }
+
+         if ($request->has('to_date') && !empty($request->to_date)) {
+             $query->whereDate('requested_date', '<=', $request->to_date);
+         }
+
+         // Order by latest
+         $query->orderBy('created_at', 'desc');
+
+         // Paginate results
+         $requests = $query->paginate(15);
+
+         // Get all outlets for filter dropdown
+         $outlets = Outlet::all();
+
+         return view('outlet.order-requests.index', compact('requests', 'outlets'));
+     }
     /**
      * Show the form for creating a new request.
      */
@@ -44,16 +61,13 @@ class OutletOrderRequestController extends Controller
         // Get the current user's outlet
         $user = Auth::user();
         $outlet = $user->managedOutlet;
-
-        if (!$outlet) {
-            return redirect()->route('outlet.dashboard')
-                ->with('error', 'You are not assigned to any outlet.');
-        }
+        $outlets = Outlet::all();
+        $gasTypes = GasType::all();
 
         // Get all active gas types
         $gasTypes = GasType::where('is_active', true)->get();
 
-        return view('outlet.order-requests.create', compact('outlet', 'gasTypes'));
+        return view('outlet.order-requests.create', compact('outlet', 'gasTypes','outlets','gasTypes'));
     }
 
     /**
