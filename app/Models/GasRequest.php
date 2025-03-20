@@ -20,13 +20,27 @@ class GasRequest extends Model
         'empty_cylinder_received',
         'payment_received',
         'amount',
-        'expected_pickup_date'
+        'expected_pickup_date',
+        'actual_pickup_date'
     ];
 
     protected $casts = [
-        'empty_cylinder_received' => 'boolean',
+        'empty_cylinder_returned' => 'boolean',
         'payment_received' => 'boolean',
+        'quantity' => 'integer',
+        'amount' => 'decimal:2',
         'expected_pickup_date' => 'date',
+        'actual_pickup_date' => 'date',
+    ];
+    public $sortable = [
+        'id',
+        'request_number',
+        'quantity',
+        'status',
+        'amount',
+        'expected_pickup_date',
+        'created_at',
+        'updated_at',
     ];
 
     public function user()
@@ -58,6 +72,60 @@ class GasRequest extends Model
 
         return $this;
     }
-    
+
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+    public function scopeFromOutlet($query, $outletId)
+    {
+        return $query->where('outlet_id', $outletId);
+    }
+    public function scopeReadyForPickup($query)
+    {
+        return $query->where('status', 'Ready for Pickup')
+                    ->where('expected_pickup_date', '<=', now()->addDays(14));
+    }
+    public function scopeExpired($query)
+    {
+        return $query->where('status', 'Ready for Pickup')
+                    ->where('expected_pickup_date', '<', now()->subDays(14));
+    }
+
+    /**
+     * Get total amount of the request.
+     */
+    public function getTotalAttribute()
+    {
+        return $this->amount * $this->quantity;
+    }
+
+    /**
+     * Check if the request is completed.
+     */
+    public function isCompleted()
+    {
+        return $this->status === 'Completed';
+    }
+
+    /**
+     * Check if the request can be picked up.
+     */
+    public function canBePickedUp()
+    {
+        return $this->status === 'Ready for Pickup' &&
+               $this->expected_pickup_date !== null &&
+               $this->expected_pickup_date->lte(now()->addDays(14));
+    }
+
+    /**
+     * Check if the request is expired.
+     */
+    public function isExpired()
+    {
+        return $this->status === 'Ready for Pickup' &&
+               $this->expected_pickup_date !== null &&
+               $this->expected_pickup_date->lt(now()->subDays(14));
+    }
 
 }

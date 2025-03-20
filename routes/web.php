@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GasRequestController;
 use App\Http\Controllers\Admin\HeadOfficeStockController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
@@ -88,6 +89,35 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::put('/outlets/{outlet}', 'update')->name('outlets.update');
         Route::delete('/outlets/{outlet}', [OutletController::class, 'destroy'])->name('outlets.destroy');
         Route::put('/outlets/{outlet}/assign-manager', 'assignManager')->name('outlets.assign-manager');
+
+          // Display all gas requests
+    Route::get('/gas-requests', [GasRequestController::class, 'index'])->name('gas-requests.index');
+
+    // Show create gas request form
+    Route::get('/gas-requests/create', [GasRequestController::class, 'create'])->name('gas-requests.create');
+
+    // Store new gas request
+    Route::post('/gas-requests', [GasRequestController::class, 'store'])->name('gas-requests.store');
+
+    // Show specific gas request details
+    Route::get('/gas-requests/{gasRequest}', [GasRequestController::class, 'show'])->name('gas-requests.show');
+
+    // Show edit gas request form
+    Route::get('/gas-requests/{gasRequest}/edit', [GasRequestController::class, 'edit'])->name('gas-requests.edit');
+
+    // Update gas request
+    Route::put('/gas-requests/{gasRequest}', [GasRequestController::class, 'update'])->name('gas-requests.update');
+
+    // Delete gas request
+    Route::delete('/gas-requests/{gasRequest}', [GasRequestController::class, 'destroy'])->name('gas-requests.destroy');
+
+    // Update payment status via AJAX
+    Route::post('/gas-requests/update-payment', [GasRequestController::class, 'updatePayment'])->name('gas-requests.update-payment');
+
+    // Update cylinder return status via AJAX
+    Route::post('/gas-requests/update-cylinder', [GasRequestController::class, 'updateCylinder'])->name('gas-requests.update-cylinder');
+
+
     });
 });
 // In your routes file

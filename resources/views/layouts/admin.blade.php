@@ -309,6 +309,10 @@ body {
                     <a class="dropdown-toggle text-white text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <span id="admin-name">{{ Auth::user()->name }}</span>
                     </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="/admin/profile"><i class="fas fa-user me-2"></i>Profile</a></li>
                         <li><a class="dropdown-item" href="/admin/settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
@@ -352,7 +356,7 @@ body {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'orders' %}active{% endif %}" href="/admin/orders">
+                        <a class="nav-link " href="{{ route('admin.gas-requests.index') }}">
                             <i class="fas fa-shopping-cart me-2"></i>Orders
                         </a>
                     </li>
